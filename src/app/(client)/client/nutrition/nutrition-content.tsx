@@ -17,6 +17,7 @@ import type { Tables } from "@/lib/types/database";
 
 const tabs = [
   { id: "log", label: "Food Log" },
+  { id: "calculator", label: "Calculator" },
   { id: "scan", label: "AI Scan" },
   { id: "ask", label: "Ask AI" },
 ];
