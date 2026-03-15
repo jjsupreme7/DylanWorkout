@@ -2,16 +2,15 @@
 
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { Avatar } from "@/components/ui/avatar";
-import { Bell, Dumbbell, Home, LineChart, Apple, Users } from "lucide-react";
+import { Bell, Dumbbell, Home, LineChart, BookOpen, Users } from "lucide-react";
 import Link from "next/link";
 import type { Tables } from "@/lib/types/database";
 
 const navItems = [
   { href: "/client/dashboard", label: "Home", icon: Home },
   { href: "/client/workout", label: "Workout", icon: Dumbbell },
-  { href: "/client/nutrition", label: "Nutrition", icon: Apple },
   { href: "/client/progress", label: "Progress", icon: LineChart },
-  { href: "/client/community", label: "Community", icon: Users },
+  { href: "/client/learn", label: "Learn", icon: BookOpen },
 ];
 
 interface ClientShellProps {
@@ -34,7 +33,7 @@ export function ClientShell({ profile, children }: ClientShellProps) {
           </div>
           <Link
             href="/client/notifications"
-            className="relative rounded-lg p-2 hover:bg-surface transition-colors"
+            className="relative rounded-lg p-2 hover:bg-card transition-colors"
           >
             <Bell className="h-5 w-5 text-text-secondary" />
           </Link>

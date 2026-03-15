@@ -42,3 +42,51 @@ export const MILESTONES = [
   { id: "checkins_4", label: "4 Check-ins", icon: "CheckCircle" },
   { id: "weight_goal", label: "Goal Weight Reached", icon: "Target" },
 ] as const;
+
+export const MOVEMENT_PATTERNS = [
+  "Squat",
+  "Hinge",
+  "Horizontal Push",
+  "Horizontal Pull",
+  "Vertical Push",
+  "Vertical Pull",
+  "Single Leg",
+  "Isolation",
+] as const;
+
+export const TRAINING_GOALS = {
+  strength: {
+    name: "Strength",
+    description: "Build maximal strength through heavy compound lifts",
+    rpeRange: "6-9",
+    repRange: "1-5",
+    setsPerExercise: "3-5",
+    frequency: "2-3x/week per movement",
+  },
+  hypertrophy: {
+    name: "Hypertrophy",
+    description:
+      "Build muscle through tension and progressive overload to failure",
+    rpeRange: "8-10",
+    repRange: "5-12",
+    setsPerExercise: "2-4",
+    frequency: "2x/week per muscle",
+  },
+  rehab: {
+    name: "Mobility/Rehab",
+    description: "Restore movement, reduce pain, build range of motion",
+    rpeRange: "6-8",
+    repRange: "10-20",
+    setsPerExercise: "2-4",
+    frequency: "2-3x/week",
+  },
+  hybrid: {
+    name: "Hybrid",
+    description:
+      "Balanced strength, muscle, and mobility through strict technique",
+    rpeRange: "6-10",
+    repRange: "3-15",
+    setsPerExercise: "2-3",
+    frequency: "2-4x/week",
+  },
+} as const;
