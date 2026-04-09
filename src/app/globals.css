@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dragon-black text-dragon-text antialiased;
+  }
+
+  * {
+    @apply border-dragon-border;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-dragon-dark;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-dragon-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-dragon-muted;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-dragon-card border border-dragon-border rounded-xl p-5;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-200 hover:border-dragon-red/30 hover:shadow-red-glow;
+  }
+
+  .btn-primary {
+    @apply bg-dragon-red hover:bg-dragon-red-glow text-white font-semibold
+           px-6 py-3 rounded-lg transition-all duration-200
+           hover:shadow-red-glow active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-dragon-card border border-dragon-border text-dragon-text
+           font-medium px-6 py-3 rounded-lg transition-all duration-200
+           hover:border-dragon-gold/40 hover:text-dragon-gold-light;
+  }
+
+  .btn-gold {
+    @apply bg-dragon-gold hover:bg-dragon-gold-light text-dragon-black font-semibold
+           px-6 py-3 rounded-lg transition-all duration-200
+           hover:shadow-gold-glow active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full bg-dragon-dark border border-dragon-border rounded-lg
+           px-4 py-3 text-dragon-text placeholder-dragon-muted
+           focus:outline-none focus:border-dragon-red/50 focus:ring-1
+           focus:ring-dragon-red/30 transition-all duration-200;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold text-white;
+  }
+
+  .stat-label {
+    @apply text-sm text-dragon-muted uppercase tracking-wider mt-1;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-red {
+    @apply badge bg-dragon-red/20 text-dragon-red-glow;
+  }
+
+  .badge-gold {
+    @apply badge bg-dragon-gold/20 text-dragon-gold-light;
+  }
+
+  .badge-green {
+    @apply badge bg-green-900/30 text-green-400;
+  }
+
+  .section-title {
+    @apply text-lg font-bold text-white tracking-tight;
+  }
+
+  .progress-bar {
+    @apply h-2 rounded-full bg-dragon-dark overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-500;
+  }
+}
