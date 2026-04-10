@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 export async function signIn(formData: FormData) {
@@ -47,8 +47,11 @@ export async function signUp(formData: FormData) {
   if (error) return { error: error.message };
   if (!data.user) return { error: "Signup failed" };
 
-  // Create profile
-  const { error: profileError } = await supabase.from("profiles").insert({
+  // Use admin client to bypass RLS for profile creation
+  // (session isn't fully established yet after signup)
+  const admin = createAdminClient();
+
+  const { error: profileError } = await admin.from("profiles").insert({
     id: data.user.id,
     email,
     full_name: fullName,
@@ -59,7 +62,7 @@ export async function signUp(formData: FormData) {
 
   // If coach, create coach_profiles row
   if (role === "coach") {
-    await supabase.from("coach_profiles").insert({ id: data.user.id });
+    await admin.from("coach_profiles").insert({ id: data.user.id });
   }
 
   const dest = role === "coach" ? "/coach/dashboard" : "/client/dashboard";
