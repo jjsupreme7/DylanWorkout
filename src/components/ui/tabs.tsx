@@ -37,7 +37,7 @@ export function Tabs({ tabs, activeTab: controlledActive, onChange, className }:
           {activeTab === tab.id && (
             <motion.div
               layoutId="tab-pill"
-              className="absolute inset-0 rounded-[--radius-md] bg-card border border-border shadow-[--shadow-card]"
+              className="absolute inset-0 rounded-[--radius-md] bg-card border border-brand/20 shadow-[0_0_12px_rgba(192,25,46,0.08)]"
               transition={{ type: "spring", stiffness: 400, damping: 28 }}
             />
           )}

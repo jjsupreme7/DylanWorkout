@@ -1,0 +1,67 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e7]: PU
+          - generic [ref=e8]:
+            - paragraph [ref=e9]: Preview User
+            - paragraph [ref=e10]: Client
+        - link [ref=e11] [cursor=pointer]:
+          - /url: /client/notifications
+          - img [ref=e12]
+    - main [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - img [ref=e18]
+          - heading "Training Knowledge" [level=1] [ref=e20]
+        - paragraph [ref=e21]: Core principles from the Enter the Dragon training philosophy
+        - generic [ref=e22]:
+          - button "Principles" [ref=e23]: Principles
+          - button "Movements" [ref=e25]
+          - button "Nutrition" [ref=e26]
+          - button "Progression" [ref=e27]
+          - button "Health" [ref=e28]
+          - button "Technique" [ref=e29]
+          - button "Manual" [ref=e30]
+        - generic [ref=e31]:
+          - button "Strength is the Mother Quality" [ref=e33]:
+            - paragraph [ref=e34]: Strength is the Mother Quality
+            - img [ref=e35]
+          - button "Tension is Everything" [ref=e38]:
+            - paragraph [ref=e39]: Tension is Everything
+            - img [ref=e40]
+          - button "Simplicity is Brilliance" [ref=e43]:
+            - paragraph [ref=e44]: Simplicity is Brilliance
+            - img [ref=e45]
+          - button "Quality Over Quantity" [ref=e48]:
+            - paragraph [ref=e49]: Quality Over Quantity
+            - img [ref=e50]
+          - button "Beat Your Log Book" [ref=e53]:
+            - paragraph [ref=e54]: Beat Your Log Book
+            - img [ref=e55]
+          - button "Training Myths Debunked" [ref=e58]:
+            - paragraph [ref=e59]: Training Myths Debunked
+            - img [ref=e60]
+          - button "Male vs. Female Training" [ref=e63]:
+            - paragraph [ref=e64]: Male vs. Female Training
+            - img [ref=e65]
+    - navigation [ref=e67]:
+      - generic [ref=e68]:
+        - link "Home" [ref=e69] [cursor=pointer]:
+          - /url: /client/dashboard
+          - img [ref=e70]
+          - generic [ref=e73]: Home
+        - link "Workout" [ref=e74] [cursor=pointer]:
+          - /url: /client/workout
+          - img [ref=e75]
+          - generic [ref=e81]: Workout
+        - link "Progress" [ref=e82] [cursor=pointer]:
+          - /url: /client/progress
+          - img [ref=e83]
+          - generic [ref=e86]: Progress
+        - link "Learn" [ref=e87] [cursor=pointer]:
+          - /url: /client/learn
+          - img [ref=e88]
+          - generic [ref=e90]: Learn
+  - region "Notifications alt+T"
