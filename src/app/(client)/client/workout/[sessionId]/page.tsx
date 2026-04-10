@@ -11,10 +11,11 @@ import { Modal } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
 import { PillSelector } from "@/components/ui/pill-selector";
 import { Badge } from "@/components/ui/badge";
-import { Timer, CheckCircle, Trophy, X } from "lucide-react";
+import { Timer, CheckCircle, Trophy, X, Info } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 import { toast } from "sonner";
+import { getTechniqueCue, type TechniqueCue } from "@/lib/data/technique-cues";
 
 const RPE_OPTIONS = [6, 7, 8, 9, 10].map((v) => ({
   value: String(v),
@@ -29,6 +30,7 @@ export default function ActiveWorkoutPage() {
   const [rating, setRating] = useState("7");
   const [showPR, setShowPR] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [activeCue, setActiveCue] = useState<TechniqueCue | null>(null);
 
   const { exercises, elapsed, isActive, tick, updateSet, toggleExercise } = store;
 
@@ -123,14 +125,27 @@ export default function ActiveWorkoutPage() {
               open={exercise.expanded}
               onToggle={() => toggleExercise(exIdx)}
               trigger={
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
                   {allDone ? (
                     <CheckCircle className="h-5 w-5 text-success shrink-0" />
                   ) : (
                     <div className="h-5 w-5 rounded-full border-2 border-border shrink-0" />
                   )}
-                  <div>
-                    <p className="font-medium text-sm">{exercise.exerciseName}</p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-sm truncate">{exercise.exerciseName}</p>
+                      {getTechniqueCue(exercise.exerciseName) && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveCue(getTechniqueCue(exercise.exerciseName));
+                          }}
+                          className="shrink-0 h-5 w-5 rounded-full bg-brand/10 flex items-center justify-center hover:bg-brand/20 transition-colors"
+                        >
+                          <Info className="h-3 w-3 text-brand" />
+                        </button>
+                      )}
+                    </div>
                     <p className="text-xs text-text-muted">
                       {exercise.sets.filter((s) => s.completed).length}/{exercise.sets.length} sets
                     </p>
@@ -238,6 +253,31 @@ export default function ActiveWorkoutPage() {
             Keep Going
           </Button>
         </div>
+      </Modal>
+
+      {/* Technique cue modal */}
+      <Modal open={!!activeCue} onClose={() => setActiveCue(null)} title={activeCue?.name}>
+        {activeCue && (
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-brand mb-2">How to Perform</p>
+              <p className="text-sm text-text-secondary leading-relaxed">{activeCue.instructions}</p>
+            </div>
+            {activeCue.commonMistakes.length > 0 && (
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-danger mb-2">Common Mistakes</p>
+                <ul className="space-y-1.5">
+                  {activeCue.commonMistakes.map((mistake, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
+                      <X className="h-3.5 w-3.5 text-danger shrink-0 mt-0.5" />
+                      <span>{mistake}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
       </Modal>
     </div>
   );

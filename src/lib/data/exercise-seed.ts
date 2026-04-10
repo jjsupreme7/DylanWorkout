@@ -155,6 +155,15 @@ export const EXERCISE_SEED: Exercise[] = [
     muscle_group: "Hamstrings",
     movement_pattern: "Hinge",
     equipment: "Barbell",
+    instructions:
+      "Set up like a deadlift but do not bend your legs to meet the bar. Keep your lower back neutral — never let the lumbar round or overextend. Drive your hips back like loading for a hip thrust. Thrust hips forward to return, keeping the bar in contact with your legs the entire time. Feel the stretch in your glutes and hamstrings, not your lower back.",
+    common_mistakes: [
+      "Allowing the lower back to round",
+      "Overextending the lower back (pointing butt up and back)",
+      "Not keeping the bar in contact with legs throughout",
+      "Bending the knees too much (this becomes a deadlift)",
+      "Not driving the hips back far enough",
+    ],
   },
   {
     name: "Stiff Leg Deadlift",
