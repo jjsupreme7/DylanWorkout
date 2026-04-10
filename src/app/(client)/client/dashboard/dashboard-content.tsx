@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
-import { Dumbbell, Flame, Trophy, Calendar, ClipboardCheck, CreditCard, ArrowRight } from "lucide-react";
+import { Dumbbell, Flame, Trophy, Calendar, ClipboardCheck, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { formatDate, formatDuration } from "@/lib/utils/format";
 import type { Tables } from "@/lib/types/database";
@@ -129,20 +129,6 @@ export function DashboardContent({ data, program }: DashboardContentProps) {
           />
         )}
       </div>
-
-      {/* Subscription CTA */}
-      <Link href="/client/subscription">
-        <Card interactive className="p-4 flex items-center gap-3">
-          <div className="rounded-[--radius-md] bg-brand-muted p-2.5">
-            <CreditCard className="h-5 w-5 text-brand" strokeWidth={1.5} />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium">Manage Subscription</p>
-            <p className="text-[11px] text-text-muted">View plans & billing</p>
-          </div>
-          <ArrowRight className="h-4 w-4 text-text-muted" strokeWidth={1.5} />
-        </Card>
-      </Link>
 
       {/* Recent Sessions */}
       <div>

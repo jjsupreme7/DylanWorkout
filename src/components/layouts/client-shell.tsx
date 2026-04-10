@@ -2,9 +2,8 @@
 
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { Avatar } from "@/components/ui/avatar";
-import { Bell, Dumbbell, Home, LineChart, BookOpen, LogOut } from "lucide-react";
+import { Bell, Dumbbell, Home, LineChart, BookOpen, Settings } from "lucide-react";
 import Link from "next/link";
-import { signOut } from "@/lib/actions/auth";
 import type { Tables } from "@/lib/types/database";
 
 const navItems = [
@@ -12,6 +11,7 @@ const navItems = [
   { href: "/client/workout", label: "Workout", icon: Dumbbell },
   { href: "/client/progress", label: "Progress", icon: LineChart },
   { href: "/client/learn", label: "Learn", icon: BookOpen },
+  { href: "/client/settings", label: "Settings", icon: Settings },
 ];
 
 interface ClientShellProps {
@@ -32,22 +32,12 @@ export function ClientShell({ profile, children }: ClientShellProps) {
               <p className="text-[11px] text-text-muted">Client</p>
             </div>
           </div>
-          <div className="flex items-center gap-1">
-            <Link
-              href="/client/notifications"
-              className="relative rounded-[--radius-md] p-2.5 hover:bg-surface transition-colors"
-            >
-              <Bell className="h-5 w-5 text-text-secondary" strokeWidth={1.5} />
-            </Link>
-            <form action={signOut}>
-              <button
-                type="submit"
-                className="rounded-[--radius-md] p-2.5 hover:bg-surface transition-colors"
-              >
-                <LogOut className="h-5 w-5 text-text-secondary" strokeWidth={1.5} />
-              </button>
-            </form>
-          </div>
+          <Link
+            href="/client/notifications"
+            className="relative rounded-[--radius-md] p-2.5 hover:bg-surface transition-colors"
+          >
+            <Bell className="h-5 w-5 text-text-secondary" strokeWidth={1.5} />
+          </Link>
         </div>
       </header>
 
