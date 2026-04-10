@@ -35,21 +35,20 @@ export async function signUp(formData: FormData) {
   const role = (formData.get("role") as string) || "client";
 
   const supabase = await createClient();
+  const admin = createAdminClient();
 
-  const { data, error } = await supabase.auth.signUp({
+  // Create user via admin client to auto-confirm email
+  const { data: adminData, error: adminError } = await admin.auth.admin.createUser({
     email,
     password,
-    options: {
-      data: { full_name: fullName, role },
-    },
+    email_confirm: true,
+    user_metadata: { full_name: fullName, role },
   });
 
-  if (error) return { error: error.message };
-  if (!data.user) return { error: "Signup failed" };
+  if (adminError) return { error: adminError.message };
+  if (!adminData.user) return { error: "Signup failed" };
 
-  // Use admin client to bypass RLS for profile creation
-  // (session isn't fully established yet after signup)
-  const admin = createAdminClient();
+  const data = { user: adminData.user };
 
   const { error: profileError } = await admin.from("profiles").insert({
     id: data.user.id,
@@ -64,6 +63,10 @@ export async function signUp(formData: FormData) {
   if (role === "coach") {
     await admin.from("coach_profiles").insert({ id: data.user.id });
   }
+
+  // Sign in to establish session
+  const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+  if (signInError) return { error: signInError.message };
 
   const dest = role === "coach" ? "/coach/dashboard" : "/client/dashboard";
   redirect(dest);
