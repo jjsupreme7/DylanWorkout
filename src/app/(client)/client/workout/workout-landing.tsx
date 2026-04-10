@@ -4,6 +4,7 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/ui/page-header";
 import { Dumbbell, Play } from "lucide-react";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useRouter } from "next/navigation";
@@ -85,12 +86,10 @@ export function WorkoutLanding({ program, userId }: WorkoutLandingProps) {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-bold">{program.program.name}</h1>
-        {program.program.description && (
-          <p className="mt-1 text-sm text-text-secondary">{program.program.description}</p>
-        )}
-      </div>
+      <PageHeader
+        title={program.program.name}
+        subtitle={program.program.description ?? undefined}
+      />
 
       <div className="space-y-3">
         {days.map((day) => (

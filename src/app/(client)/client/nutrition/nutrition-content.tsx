@@ -9,6 +9,7 @@ import { Tabs } from "@/components/ui/tabs";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Modal } from "@/components/ui/modal";
 import { EmptyState } from "@/components/ui/empty-state";
+import { PageHeader } from "@/components/ui/page-header";
 import { Apple, Plus, Camera, MessageCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { MEAL_TYPES } from "@/lib/utils/constants";
@@ -70,6 +71,7 @@ export function NutritionContent({ foodLogs: initialLogs, targets, userId }: Nut
 
   return (
     <div className="space-y-4">
+      <PageHeader title="Nutrition" subtitle="Track your meals and macros" />
       <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       {activeTab === "log" && (

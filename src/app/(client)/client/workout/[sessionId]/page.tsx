@@ -162,7 +162,7 @@ export default function ActiveWorkoutPage() {
                       placeholder="lbs"
                       value={set.weight}
                       onChange={(e) => updateSet(exIdx, setIdx, "weight", e.target.value)}
-                      className="w-full rounded-lg border border-border bg-surface px-2 py-2 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-brand/50"
+                      className="w-full rounded-[--radius-md] border border-border bg-surface px-2 py-2 text-sm font-mono tabular-nums text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/60 transition-all duration-150"
                     />
                     <input
                       type="text"
@@ -170,7 +170,7 @@ export default function ActiveWorkoutPage() {
                       placeholder="reps"
                       value={set.reps}
                       onChange={(e) => updateSet(exIdx, setIdx, "reps", e.target.value)}
-                      className="w-full rounded-lg border border-border bg-surface px-2 py-2 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-brand/50"
+                      className="w-full rounded-[--radius-md] border border-border bg-surface px-2 py-2 text-sm font-mono tabular-nums text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/60 transition-all duration-150"
                     />
                     <input
                       type="text"
@@ -178,7 +178,7 @@ export default function ActiveWorkoutPage() {
                       placeholder="RPE"
                       value={set.rpe}
                       onChange={(e) => updateSet(exIdx, setIdx, "rpe", e.target.value)}
-                      className="w-full rounded-lg border border-border bg-surface px-2 py-2 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-brand/50"
+                      className="w-full rounded-[--radius-md] border border-border bg-surface px-2 py-2 text-sm font-mono tabular-nums text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/60 transition-all duration-150"
                     />
                     <button
                       onClick={() => updateSet(exIdx, setIdx, "completed", !set.completed)}

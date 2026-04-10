@@ -5,6 +5,7 @@ import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
+import { PageHeader } from "@/components/ui/page-header";
 import { Dumbbell, Flame, Trophy, Calendar, ClipboardCheck, CreditCard, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { formatDate, formatDuration } from "@/lib/utils/format";
@@ -28,8 +29,7 @@ export function DashboardContent({ data, program }: DashboardContentProps) {
   return (
     <div className="space-y-5">
       {/* Today's workout */}
-      <Card elevated className="relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-brand/[0.04] rounded-full -translate-y-10 translate-x-10 blur-2xl" />
+      <Card elevated className="hero-gradient border-t-2 border-t-brand/40">
         <div className="relative">
           <p className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Today</p>
           {hasProgram ? (
@@ -82,7 +82,7 @@ export function DashboardContent({ data, program }: DashboardContentProps) {
           </div>
         </Card>
         <Link href="/client/checkin">
-          <Card className="p-4 flex items-center gap-3 hover:border-brand/30 transition-all duration-150 cursor-pointer h-full">
+          <Card interactive className="p-4 flex items-center gap-3 h-full">
             <div className="rounded-[--radius-md] bg-gold-muted p-2.5">
               <ClipboardCheck className="h-5 w-5 text-gold" strokeWidth={1.5} />
             </div>
@@ -132,7 +132,7 @@ export function DashboardContent({ data, program }: DashboardContentProps) {
 
       {/* Subscription CTA */}
       <Link href="/client/subscription">
-        <Card className="p-4 flex items-center gap-3 hover:border-brand/30 transition-all duration-150">
+        <Card interactive className="p-4 flex items-center gap-3">
           <div className="rounded-[--radius-md] bg-brand-muted p-2.5">
             <CreditCard className="h-5 w-5 text-brand" strokeWidth={1.5} />
           </div>

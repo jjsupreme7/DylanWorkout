@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/ui/stat-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Select } from "@/components/ui/select";
+import { PageHeader } from "@/components/ui/page-header";
 import { Trophy, TrendingUp, Ruler, Camera, Plus, Loader2 } from "lucide-react";
 import { formatDate, formatWeight } from "@/lib/utils/format";
 import { format } from "date-fns";
@@ -135,13 +136,15 @@ export function ProgressContent({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">Progress</h1>
-        <div className="flex items-center gap-2">
-          <Badge variant="default">{totalPRs} PRs</Badge>
-          <Badge variant="default">{workoutStreak?.current_streak ?? 0}d streak</Badge>
-        </div>
-      </div>
+      <PageHeader
+        title="Progress"
+        actions={
+          <>
+            <Badge variant="default">{totalPRs} PRs</Badge>
+            <Badge variant="default">{workoutStreak?.current_streak ?? 0}d streak</Badge>
+          </>
+        }
+      />
 
       <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 

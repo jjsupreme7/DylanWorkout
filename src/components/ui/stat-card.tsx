@@ -1,6 +1,9 @@
+"use client";
+
 import { cn } from "@/lib/utils/cn";
 import { Card } from "./card";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface StatCardProps {
   label: string;
@@ -14,7 +17,14 @@ export function StatCard({ label, value, trend, trendValue, className }: StatCar
   return (
     <Card className={cn("p-4", className)}>
       <p className="text-xs font-medium text-text-muted uppercase tracking-wider">{label}</p>
-      <p className="mt-1.5 font-heading text-2xl font-bold tabular-nums">{value}</p>
+      <motion.p
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="mt-1.5 font-heading text-2xl font-bold tabular-nums"
+      >
+        {value}
+      </motion.p>
       {trend && (
         <div
           className={cn(
