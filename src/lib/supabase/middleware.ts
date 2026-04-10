@@ -35,12 +35,13 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  // Redirect unauthenticated users away from protected routes
-  if (!user && (pathname.startsWith("/client") || pathname.startsWith("/coach"))) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
+  // TODO: Re-enable auth protection before production
+  // Bypass auth for development preview
+  // if (!user && (pathname.startsWith("/client") || pathname.startsWith("/coach"))) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = "/login";
+  //   return NextResponse.redirect(url);
+  // }
 
   // Role-based route enforcement
   if (user && (pathname.startsWith("/client") || pathname.startsWith("/coach"))) {

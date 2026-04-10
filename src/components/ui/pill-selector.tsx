@@ -22,10 +22,10 @@ export function PillSelector<T extends string>({
           key={option.value}
           onClick={() => onChange(option.value)}
           className={cn(
-            "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+            "shrink-0 rounded-[--radius-full] px-4 py-1.5 text-sm font-medium transition-all duration-150",
             value === option.value
-              ? "bg-brand text-white"
-              : "bg-surface text-text-secondary hover:text-text"
+              ? "bg-brand text-white shadow-[0_0_12px_rgba(192,25,46,0.2)]"
+              : "bg-surface text-text-secondary hover:text-text hover:bg-surface-hover"
           )}
         >
           {option.label}

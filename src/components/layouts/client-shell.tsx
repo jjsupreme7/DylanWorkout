@@ -2,7 +2,7 @@
 
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { Avatar } from "@/components/ui/avatar";
-import { Bell, Dumbbell, Home, LineChart, BookOpen, Users } from "lucide-react";
+import { Bell, Dumbbell, Home, LineChart, BookOpen } from "lucide-react";
 import Link from "next/link";
 import type { Tables } from "@/lib/types/database";
 
@@ -20,28 +20,28 @@ interface ClientShellProps {
 
 export function ClientShell({ profile, children }: ClientShellProps) {
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-[100dvh] pb-20">
       {/* Top header */}
-      <header className="sticky top-0 z-30 border-b border-border bg-bg/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-30 border-b border-border/60 bg-bg/80 backdrop-blur-xl">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <Avatar src={profile.avatar_url} name={profile.full_name} size="sm" />
             <div>
-              <p className="text-sm font-medium">{profile.full_name}</p>
-              <p className="text-xs text-text-muted">Client</p>
+              <p className="font-heading text-sm font-semibold">{profile.full_name}</p>
+              <p className="text-[11px] text-text-muted">Client</p>
             </div>
           </div>
           <Link
             href="/client/notifications"
-            className="relative rounded-lg p-2 hover:bg-card transition-colors"
+            className="relative rounded-[--radius-md] p-2.5 hover:bg-surface transition-colors"
           >
-            <Bell className="h-5 w-5 text-text-secondary" />
+            <Bell className="h-5 w-5 text-text-secondary" strokeWidth={1.5} />
           </Link>
         </div>
       </header>
 
       {/* Page content */}
-      <main className="px-4 py-4">{children}</main>
+      <main className="px-4 py-5">{children}</main>
 
       {/* Bottom nav */}
       <BottomNav items={navItems} />

@@ -13,12 +13,12 @@ interface StatCardProps {
 export function StatCard({ label, value, trend, trendValue, className }: StatCardProps) {
   return (
     <Card className={cn("p-4", className)}>
-      <p className="text-xs font-medium text-text-muted uppercase tracking-wide">{label}</p>
-      <p className="mt-1 text-2xl font-bold">{value}</p>
+      <p className="text-xs font-medium text-text-muted uppercase tracking-wider">{label}</p>
+      <p className="mt-1.5 font-heading text-2xl font-bold tabular-nums">{value}</p>
       {trend && (
         <div
           className={cn(
-            "mt-1 flex items-center gap-1 text-xs font-medium",
+            "mt-1.5 flex items-center gap-1 text-xs font-medium",
             trend === "up" && "text-success",
             trend === "down" && "text-danger",
             trend === "flat" && "text-text-muted"

@@ -14,10 +14,10 @@ interface CollapsibleProps {
 
 export function Collapsible({ open, onToggle, trigger, children, className }: CollapsibleProps) {
   return (
-    <div className={cn("rounded-xl border border-border bg-card overflow-hidden", className)}>
+    <div className={cn("rounded-[--radius-xl] border border-border bg-card overflow-hidden", className)}>
       <button
         onClick={onToggle}
-        className="flex w-full items-center justify-between p-4 text-left hover:bg-surface/50 transition-colors"
+        className="flex w-full items-center justify-between p-4 text-left hover:bg-surface/40 transition-colors"
       >
         <div className="flex-1">{trigger}</div>
         <ChevronDown
@@ -25,6 +25,7 @@ export function Collapsible({ open, onToggle, trigger, children, className }: Co
             "h-5 w-5 text-text-muted transition-transform duration-200",
             open && "rotate-180"
           )}
+          strokeWidth={1.5}
         />
       </button>
       <AnimatePresence initial={false}>
@@ -33,7 +34,7 @@ export function Collapsible({ open, onToggle, trigger, children, className }: Co
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className="overflow-hidden"
           >
             <div className="border-t border-border p-4">{children}</div>

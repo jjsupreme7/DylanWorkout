@@ -21,7 +21,7 @@ export function Tabs({ tabs, activeTab: controlledActive, onChange, className }:
   const activeTab = controlledActive ?? internalActive;
 
   return (
-    <div className={cn("flex gap-1 border-b border-border", className)}>
+    <div className={cn("flex gap-1 rounded-[--radius-lg] bg-surface/60 p-1", className)}>
       {tabs.map((tab) => (
         <button
           key={tab.id}
@@ -30,18 +30,18 @@ export function Tabs({ tabs, activeTab: controlledActive, onChange, className }:
             onChange?.(tab.id);
           }}
           className={cn(
-            "relative px-4 py-2.5 text-sm font-medium transition-colors",
+            "relative flex-1 px-4 py-2 text-sm font-medium transition-colors rounded-[--radius-md]",
             activeTab === tab.id ? "text-text" : "text-text-muted hover:text-text-secondary"
           )}
         >
-          {tab.label}
           {activeTab === tab.id && (
             <motion.div
-              layoutId="tab-underline"
-              className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand"
-              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              layoutId="tab-pill"
+              className="absolute inset-0 rounded-[--radius-md] bg-card border border-border shadow-[--shadow-card]"
+              transition={{ type: "spring", stiffness: 400, damping: 28 }}
             />
           )}
+          <span className="relative z-10">{tab.label}</span>
         </button>
       ))}
     </div>

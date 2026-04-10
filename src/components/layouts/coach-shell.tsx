@@ -10,10 +10,8 @@ import {
   Users,
   ClipboardList,
   Dumbbell,
-  Megaphone,
   FileText,
   Settings,
-  LogOut,
   Sparkles,
   Zap,
 } from "lucide-react";
@@ -47,17 +45,17 @@ export function CoachShell({ profile, children }: CoachShellProps) {
   const pathname = usePathname();
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar - desktop only */}
-      <aside className="hidden lg:flex lg:w-[280px] lg:flex-col lg:border-r lg:border-border lg:bg-card">
-        <div className="p-5 border-b border-border">
-          <h1 className="text-lg font-bold tracking-tight">
+    <div className="flex min-h-[100dvh]">
+      {/* Sidebar — desktop only */}
+      <aside className="hidden lg:flex lg:w-[260px] lg:flex-col lg:border-r lg:border-border/60 lg:bg-card/50">
+        <div className="p-5 border-b border-border/60">
+          <h1 className="font-heading text-base font-bold tracking-tight">
             ENTER THE <span className="text-brand">DRAGON</span>
           </h1>
-          <p className="text-xs text-text-muted mt-0.5">Coach Portal</p>
+          <p className="text-[11px] text-text-muted mt-1">Coach Portal</p>
         </div>
 
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-0.5">
           {sidebarItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             const Icon = item.icon;
@@ -66,25 +64,25 @@ export function CoachShell({ profile, children }: CoachShellProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-[--radius-md] px-3 py-2.5 text-sm font-medium transition-all duration-150",
                   isActive
-                    ? "bg-brand/10 text-brand"
+                    ? "bg-brand-muted text-brand"
                     : "text-text-secondary hover:bg-surface hover:text-text"
                 )}
               >
-                <Icon className="h-4.5 w-4.5" />
+                <Icon className="h-[18px] w-[18px]" strokeWidth={isActive ? 2 : 1.5} />
                 {item.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="border-t border-border p-4">
+        <div className="border-t border-border/60 p-4">
           <div className="flex items-center gap-3">
             <Avatar src={profile.avatar_url} name={profile.full_name} size="sm" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{profile.full_name}</p>
-              <p className="text-xs text-text-muted truncate">{profile.email}</p>
+              <p className="text-[11px] text-text-muted truncate">{profile.email}</p>
             </div>
           </div>
         </div>
@@ -93,9 +91,9 @@ export function CoachShell({ profile, children }: CoachShellProps) {
       {/* Main content */}
       <div className="flex-1 pb-20 lg:pb-0">
         {/* Mobile header */}
-        <header className="sticky top-0 z-30 border-b border-border bg-bg/95 backdrop-blur-sm lg:hidden">
+        <header className="sticky top-0 z-30 border-b border-border/60 bg-bg/80 backdrop-blur-xl lg:hidden">
           <div className="flex items-center justify-between px-4 py-3">
-            <h1 className="text-base font-bold tracking-tight">
+            <h1 className="font-heading text-sm font-bold tracking-tight">
               ENTER THE <span className="text-brand">DRAGON</span>
             </h1>
             <Avatar src={profile.avatar_url} name={profile.full_name} size="sm" />

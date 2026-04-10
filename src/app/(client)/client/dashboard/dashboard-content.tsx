@@ -5,7 +5,7 @@ import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Dumbbell, Flame, Trophy, Calendar, ClipboardCheck, CreditCard } from "lucide-react";
+import { Dumbbell, Flame, Trophy, Calendar, ClipboardCheck, CreditCard, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { formatDate, formatDuration } from "@/lib/utils/format";
 import type { Tables } from "@/lib/types/database";
@@ -26,28 +26,29 @@ export function DashboardContent({ data, program }: DashboardContentProps) {
   const hasProgram = !!program;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Today's workout */}
       <Card elevated className="relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full -translate-y-8 translate-x-8" />
+        <div className="absolute top-0 right-0 w-40 h-40 bg-brand/[0.04] rounded-full -translate-y-10 translate-x-10 blur-2xl" />
         <div className="relative">
-          <p className="text-xs font-medium text-text-muted uppercase tracking-wide">Today</p>
+          <p className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Today</p>
           {hasProgram ? (
             <>
-              <CardTitle className="mt-1">Today&apos;s Workout</CardTitle>
-              <p className="mt-1 text-sm text-text-secondary">Your program is ready</p>
+              <CardTitle className="mt-1.5">Today&apos;s Workout</CardTitle>
+              <p className="mt-1 text-sm text-text-secondary">Your program is ready — time to train.</p>
               <Link href="/client/workout">
-                <Button className="mt-4">
-                  <Dumbbell className="h-4 w-4" />
+                <Button className="mt-4 group" size="md">
+                  <Dumbbell className="h-4 w-4" strokeWidth={1.5} />
                   Start Workout
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                 </Button>
               </Link>
             </>
           ) : (
             <>
-              <CardTitle className="mt-1">No Program Assigned</CardTitle>
+              <CardTitle className="mt-1.5">No Program Assigned</CardTitle>
               <p className="mt-1 text-sm text-text-secondary">
-                Your coach hasn&apos;t assigned a program yet.
+                Your coach hasn&apos;t assigned a program yet. Check back soon.
               </p>
             </>
           )}
@@ -72,23 +73,23 @@ export function DashboardContent({ data, program }: DashboardContentProps) {
       {/* Streak + Check-in row */}
       <div className="grid grid-cols-2 gap-3">
         <Card className="p-4 flex items-center gap-3">
-          <div className="rounded-lg bg-brand/10 p-2.5">
-            <Flame className="h-5 w-5 text-brand" />
+          <div className="rounded-[--radius-md] bg-brand-muted p-2.5">
+            <Flame className="h-5 w-5 text-brand" strokeWidth={1.5} />
           </div>
           <div>
-            <p className="text-xs text-text-muted">Best Streak</p>
-            <p className="text-lg font-bold">{workoutStreak?.longest_streak ?? 0}</p>
+            <p className="text-[11px] text-text-muted">Best Streak</p>
+            <p className="font-heading text-lg font-bold">{workoutStreak?.longest_streak ?? 0}</p>
           </div>
         </Card>
         <Link href="/client/checkin">
-          <Card className="p-4 flex items-center gap-3 hover:border-brand/30 transition-colors cursor-pointer h-full">
-            <div className="rounded-lg bg-gold/10 p-2.5">
-              <ClipboardCheck className="h-5 w-5 text-gold" />
+          <Card className="p-4 flex items-center gap-3 hover:border-brand/30 transition-all duration-150 cursor-pointer h-full">
+            <div className="rounded-[--radius-md] bg-gold-muted p-2.5">
+              <ClipboardCheck className="h-5 w-5 text-gold" strokeWidth={1.5} />
             </div>
             <div>
-              <p className="text-xs text-text-muted">Check-in</p>
+              <p className="text-[11px] text-text-muted">Check-in</p>
               <p className="text-sm font-medium">
-                {data.lastCheckin ? formatDate(data.lastCheckin.submitted_at) : "Due"}
+                {data.lastCheckin ? formatDate(data.lastCheckin.submitted_at) : "Due now"}
               </p>
             </div>
           </Card>
@@ -98,20 +99,22 @@ export function DashboardContent({ data, program }: DashboardContentProps) {
       {/* Recent PRs */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-semibold">Recent PRs</h2>
-          <Link href="/client/progress" className="text-xs text-brand hover:text-brand-hover transition-colors">
+          <h2 className="font-heading text-base font-semibold">Recent PRs</h2>
+          <Link href="/client/progress" className="text-xs font-medium text-brand hover:text-brand-hover transition-colors">
             View all
           </Link>
         </div>
         {data.recentPRs.length > 0 ? (
           <div className="space-y-2">
             {data.recentPRs.map((pr) => (
-              <Card key={pr.id} className="p-3 flex items-center justify-between">
+              <Card key={pr.id} className="p-3.5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Trophy className="h-4 w-4 text-gold" />
+                  <div className="h-8 w-8 rounded-full bg-gold-muted flex items-center justify-center">
+                    <Trophy className="h-4 w-4 text-gold" strokeWidth={1.5} />
+                  </div>
                   <div>
-                    <p className="text-sm font-medium">{pr.weight} {pr.weight_unit}</p>
-                    <p className="text-xs text-text-muted">{pr.reps} reps</p>
+                    <p className="text-sm font-medium font-mono tabular-nums">{pr.weight} {pr.weight_unit}</p>
+                    <p className="text-[11px] text-text-muted">{pr.reps} reps</p>
                   </div>
                 </div>
                 <Badge variant="success">PR</Badge>
@@ -122,37 +125,40 @@ export function DashboardContent({ data, program }: DashboardContentProps) {
           <EmptyState
             icon={Trophy}
             title="No PRs yet"
-            description="Start logging workouts to track personal records"
+            description="Complete your first workout to start tracking personal records"
           />
         )}
       </div>
 
       {/* Subscription CTA */}
       <Link href="/client/subscription">
-        <Card className="p-4 flex items-center gap-3 hover:border-brand/30 transition-colors">
-          <div className="rounded-lg bg-brand/10 p-2.5">
-            <CreditCard className="h-5 w-5 text-brand" />
+        <Card className="p-4 flex items-center gap-3 hover:border-brand/30 transition-all duration-150">
+          <div className="rounded-[--radius-md] bg-brand-muted p-2.5">
+            <CreditCard className="h-5 w-5 text-brand" strokeWidth={1.5} />
           </div>
           <div className="flex-1">
             <p className="text-sm font-medium">Manage Subscription</p>
-            <p className="text-xs text-text-muted">View plans & billing</p>
+            <p className="text-[11px] text-text-muted">View plans & billing</p>
           </div>
+          <ArrowRight className="h-4 w-4 text-text-muted" strokeWidth={1.5} />
         </Card>
       </Link>
 
       {/* Recent Sessions */}
       <div>
-        <h2 className="text-base font-semibold mb-3">Recent Sessions</h2>
+        <h2 className="font-heading text-base font-semibold mb-3">Recent Sessions</h2>
         {data.recentSessions.length > 0 ? (
           <div className="space-y-2">
             {data.recentSessions.slice(0, 5).map((session) => (
-              <Card key={session.id} className="p-3 flex items-center justify-between">
+              <Card key={session.id} className="p-3.5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Calendar className="h-4 w-4 text-text-muted" />
+                  <div className="h-8 w-8 rounded-full bg-surface flex items-center justify-center">
+                    <Calendar className="h-4 w-4 text-text-muted" strokeWidth={1.5} />
+                  </div>
                   <div>
                     <p className="text-sm font-medium">{formatDate(session.started_at)}</p>
-                    <p className="text-xs text-text-muted">
-                      {session.duration_minutes ? formatDuration(session.duration_minutes) : "—"}
+                    <p className="text-[11px] text-text-muted">
+                      {session.duration_minutes ? formatDuration(session.duration_minutes) : "In progress"}
                     </p>
                   </div>
                 </div>

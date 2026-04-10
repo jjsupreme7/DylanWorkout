@@ -2,14 +2,17 @@
 
 @theme {
   /* Backgrounds */
-  --color-bg: #0d0608;
-  --color-card: #160a0d;
-  --color-surface: #241319;
+  --color-bg: #0a0507;
+  --color-card: #13090e;
+  --color-surface: #1e1118;
+  --color-surface-hover: #2a1822;
 
   /* Brand */
   --color-brand: #c0192e;
   --color-brand-hover: #d41e35;
+  --color-brand-muted: rgba(192, 25, 46, 0.12);
   --color-gold: #d4a017;
+  --color-gold-muted: rgba(212, 160, 23, 0.12);
 
   /* Semantic */
   --color-success: #22c55e;
@@ -17,16 +20,29 @@
   --color-danger: #ef4444;
 
   /* Text */
-  --color-text: #f8ecee;
+  --color-text: #f5e8eb;
   --color-text-secondary: #b89a9f;
   --color-text-muted: #6b4f55;
 
   /* Borders */
-  --color-border: #2e1a20;
+  --color-border: #2a1a21;
   --color-border-hover: #4a2a33;
 
-  /* Font */
-  --font-sans: var(--font-inter);
+  /* Fonts */
+  --font-heading: var(--font-outfit);
+  --font-sans: var(--font-dm-sans);
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-brand: 0 4px 24px rgba(192, 25, 46, 0.2);
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-full: 9999px;
 }
 
 /* Scrollbar styling */
@@ -54,4 +70,66 @@
   select {
     font-size: 16px !important;
   }
+}
+
+/* Heading font utility */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+/* Scroll-triggered reveal animation */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.reveal-up {
+  animation: reveal-up 0.6s ease-out both;
+}
+
+.reveal-scale {
+  animation: reveal-scale 0.5s ease-out both;
+}
+
+/* Stagger delays */
+.delay-1 { animation-delay: 80ms; }
+.delay-2 { animation-delay: 160ms; }
+.delay-3 { animation-delay: 240ms; }
+.delay-4 { animation-delay: 320ms; }
+.delay-5 { animation-delay: 400ms; }
+.delay-6 { animation-delay: 480ms; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .reveal-scale {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Gradient mesh for hero backgrounds */
+.mesh-gradient {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(192, 25, 46, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(212, 160, 23, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(192, 25, 46, 0.04) 0%, transparent 50%);
 }
