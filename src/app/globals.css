@@ -2,17 +2,23 @@
 
 @theme {
   /* Backgrounds */
-  --color-bg: #0a0507;
-  --color-card: #13090e;
-  --color-surface: #1e1118;
-  --color-surface-hover: #2a1822;
+  --color-bg: #0a0a0a;
+  --color-card: #141414;
+  --color-surface: #1a1a1a;
+  --color-surface-hover: #252525;
 
-  /* Brand */
-  --color-brand: #c0192e;
-  --color-brand-hover: #d41e35;
-  --color-brand-muted: rgba(192, 25, 46, 0.12);
+  /* Brand — Wardens Gold */
+  --color-brand: #F5A623;
+  --color-brand-hover: #d4920f;
+  --color-brand-muted: rgba(245, 166, 35, 0.12);
   --color-gold: #d4a017;
   --color-gold-muted: rgba(212, 160, 23, 0.12);
+  --color-terracotta: #c27042;
+  --color-terracotta-muted: rgba(194, 112, 66, 0.12);
+
+  /* Metallic tier accents */
+  --color-bronze: #cd7f32;
+  --color-silver: #C0C0C0;
 
   /* Semantic */
   --color-success: #22c55e;
@@ -20,22 +26,22 @@
   --color-danger: #ef4444;
 
   /* Text */
-  --color-text: #f5e8eb;
-  --color-text-secondary: #b89a9f;
-  --color-text-muted: #6b4f55;
+  --color-text: #F5F5F5;
+  --color-text-secondary: #a0a0a0;
+  --color-text-muted: #666666;
 
   /* Borders */
-  --color-border: #2a1a21;
-  --color-border-hover: #4a2a33;
+  --color-border: #2a2a2a;
+  --color-border-hover: #444444;
 
   /* Fonts */
-  --font-heading: var(--font-outfit);
+  --font-heading: var(--font-cinzel);
   --font-sans: var(--font-dm-sans);
 
   /* Shadows */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
-  --shadow-brand: 0 4px 24px rgba(192, 25, 46, 0.2);
+  --shadow-brand: 0 4px 24px rgba(245, 166, 35, 0.2);
 
   /* Radius */
   --radius-sm: 0.5rem;
@@ -43,6 +49,17 @@
   --radius-lg: 1rem;
   --radius-xl: 1.25rem;
   --radius-full: 9999px;
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Scrollbar styling */
@@ -162,10 +179,23 @@
   pointer-events: none;
 }
 
-/* Gradient mesh for hero backgrounds */
+/* Gradient mesh for hero backgrounds — gold tones */
 .mesh-gradient {
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(192, 25, 46, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 50%, rgba(245, 166, 35, 0.06) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(212, 160, 23, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(192, 25, 46, 0.04) 0%, transparent 50%);
+    radial-gradient(ellipse at 50% 80%, rgba(245, 166, 35, 0.03) 0%, transparent 50%);
+}
+
+/* Warm gradient wash for coach/trust sections */
+.warm-gradient {
+  background:
+    radial-gradient(ellipse at 30% 60%, rgba(194, 112, 66, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(212, 160, 23, 0.03) 0%, transparent 50%);
+}
+
+/* Gold gradient for section backgrounds */
+.section-gradient {
+  background:
+    linear-gradient(to bottom, rgba(245, 166, 35, 0.03) 0%, rgba(0, 0, 0, 0.15) 100%);
 }

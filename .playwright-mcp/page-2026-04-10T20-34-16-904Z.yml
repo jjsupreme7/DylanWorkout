@@ -1,0 +1,88 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e7]: PU
+          - generic [ref=e8]:
+            - paragraph [ref=e9]: Preview User
+            - paragraph [ref=e10]: Client
+        - link [ref=e11] [cursor=pointer]:
+          - /url: /client/notifications
+          - img [ref=e12]
+    - main [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - img [ref=e18]
+          - heading "Training Knowledge" [level=1] [ref=e20]
+        - paragraph [ref=e21]: Core principles from the Enter the Dragon training philosophy
+        - generic [ref=e22]:
+          - button "Principles" [ref=e23]
+          - button "Movements" [ref=e25]
+          - button "Nutrition" [ref=e26]
+          - button "Progression" [ref=e27]
+          - button "Health" [ref=e28]
+          - button "Technique" [ref=e29]
+          - button "Manual" [active] [ref=e30]: Manual
+        - generic [ref=e31]:
+          - generic [ref=e102]:
+            - generic [ref=e103]:
+              - img [ref=e105]
+              - generic [ref=e108]:
+                - heading "Enter the Dragon v.2" [level=2] [ref=e109]
+                - paragraph [ref=e110]: The Complete Strength & Health Guide by Delan Chan. 60 pages covering philosophy, nutrition, sleep, cardio, resistance training, biomechanics, technique cues, and the full exercise index.
+                - paragraph [ref=e111]: PDF - 2.2 MB
+            - generic [ref=e112]:
+              - link "Read Guide" [ref=e113] [cursor=pointer]:
+                - /url: /enter-the-dragon-guide.pdf
+                - img [ref=e114]
+                - text: Read Guide
+              - link "Download" [ref=e118] [cursor=pointer]:
+                - /url: /enter-the-dragon-guide.pdf
+                - img [ref=e119]
+                - text: Download
+          - generic [ref=e122]:
+            - paragraph [ref=e123]: What's Inside
+            - generic [ref=e124]:
+              - generic [ref=e125]:
+                - generic [ref=e126]: Part I
+                - generic [ref=e127]:
+                  - paragraph [ref=e128]: The Why
+                  - paragraph [ref=e129]: Philosophy and principles
+              - generic [ref=e130]:
+                - generic [ref=e131]: Part II
+                - generic [ref=e132]:
+                  - paragraph [ref=e133]: The How
+                  - paragraph [ref=e134]: Cardio, nutrition, sleep, and resistance training guides
+              - generic [ref=e135]:
+                - generic [ref=e136]: Part III
+                - generic [ref=e137]:
+                  - paragraph [ref=e138]: The What
+                  - paragraph [ref=e139]: Training truths, programming, and exercise selection
+              - generic [ref=e140]:
+                - generic [ref=e141]: Part IV
+                - generic [ref=e142]:
+                  - paragraph [ref=e143]: Where This Applies
+                  - paragraph [ref=e144]: Biomechanics, technique cues, and exercise index
+    - navigation [ref=e67]:
+      - generic [ref=e68]:
+        - link "Home" [ref=e69] [cursor=pointer]:
+          - /url: /client/dashboard
+          - img [ref=e70]
+          - generic [ref=e73]: Home
+        - link "Workout" [ref=e74] [cursor=pointer]:
+          - /url: /client/workout
+          - img [ref=e75]
+          - generic [ref=e81]: Workout
+        - link "Progress" [ref=e82] [cursor=pointer]:
+          - /url: /client/progress
+          - img [ref=e83]
+          - generic [ref=e86]: Progress
+        - link "Learn" [ref=e87] [cursor=pointer]:
+          - /url: /client/learn
+          - img [ref=e88]
+          - generic [ref=e90]: Learn
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e96] [cursor=pointer]:
+    - img [ref=e97]
+  - alert [ref=e100]
