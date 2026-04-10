@@ -56,8 +56,8 @@ export default function ApplyPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <Card className="max-w-md w-full p-8 text-center">
+      <div className="text-center">
+        <Card className="p-8 backdrop-blur-xl bg-card/80 border-border/60">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-success/10">
             <Check className="h-7 w-7 text-success" />
           </div>
@@ -78,34 +78,59 @@ export default function ApplyPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-lg">
-        <div className="mb-8">
-          <Link href="/" className="text-sm text-text-secondary hover:text-brand transition-colors flex items-center gap-1 mb-4">
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back
-          </Link>
-          <h1 className="text-2xl font-bold">
-            ENTER THE <span className="text-brand">DRAGON</span>
-          </h1>
-          <p className="text-sm text-text-secondary mt-1">Apply for coaching — takes about 2 minutes</p>
-        </div>
+    <div>
+      {/* Mobile-only branding */}
+      <div className="mb-6 lg:hidden">
+        <Link href="/" className="text-sm text-text-secondary hover:text-brand transition-colors flex items-center gap-1 mb-4">
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back
+        </Link>
+        <h1 className="text-2xl font-bold">
+          ENTER THE <span className="text-brand">DRAGON</span>
+        </h1>
+        <p className="text-sm text-text-secondary mt-1">Apply for coaching — takes about 2 minutes</p>
+      </div>
 
-        {/* Step indicator */}
-        <div className="flex items-center gap-2 mb-6">
-          {STEPS.map((s, i) => (
-            <div key={s} className="flex items-center gap-2 flex-1">
+      {/* Desktop heading */}
+      <div className="hidden lg:block mb-6">
+        <h1 className="text-2xl font-bold">Apply for Coaching</h1>
+        <p className="text-sm text-text-secondary mt-1">Takes about 2 minutes</p>
+      </div>
+
+      {/* Step indicator — numbered circles */}
+      <div className="flex items-center mb-8">
+        {STEPS.map((s, i) => (
+          <div key={s} className="flex items-center flex-1 last:flex-none">
+            <div className="flex flex-col items-center">
               <div
-                className={`h-1.5 flex-1 rounded-full ${
-                  i <= step ? "bg-brand" : "bg-surface"
+                className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
+                  i < step
+                    ? "bg-brand text-white"
+                    : i === step
+                    ? "bg-brand text-white ring-4 ring-brand/20"
+                    : "bg-surface text-text-muted border border-border"
+                }`}
+              >
+                {i < step ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  i + 1
+                )}
+              </div>
+              <span className="hidden sm:block text-[10px] text-text-muted mt-1.5 whitespace-nowrap">{s}</span>
+            </div>
+            {i < STEPS.length - 1 && (
+              <div
+                className={`flex-1 h-0.5 mx-2 rounded-full transition-colors ${
+                  i < step ? "bg-brand" : "bg-surface"
                 }`}
               />
-            </div>
-          ))}
-        </div>
-        <p className="text-xs text-text-muted mb-4">Step {step + 1} of {STEPS.length}: {STEPS[step]}</p>
+            )}
+          </div>
+        ))}
+      </div>
 
-        <Card className="p-6">
+      <Card className="p-6 backdrop-blur-xl bg-card/80 border-border/60">
           {step === 0 && (
             <div className="space-y-4">
               <Input
@@ -209,7 +234,6 @@ export default function ApplyPage() {
             )}
           </div>
         </Card>
-      </div>
     </div>
   );
 }
