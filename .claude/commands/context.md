@@ -1,18 +1,20 @@
 Load context for DylanWorkout only.
 
-1. Read this project's Obsidian note:
+IMPORTANT: `obsidian` is a CLI tool installed at /opt/homebrew/bin/obsidian. Run these as shell commands using the Bash tool — this is NOT an MCP server.
+
+1. Read this project's Obsidian note (run via Bash tool):
 ```bash
-obsidian read file="DylanWorkout" vault="Obsidian Vault"
+/opt/homebrew/bin/obsidian read file="DylanWorkout" vault="Obsidian Vault"
 ```
 
-2. Read today's daily note for any relevant entries:
+2. Read today's daily note for any relevant entries (run via Bash tool):
 ```bash
-obsidian daily:read vault="Obsidian Vault"
+/opt/homebrew/bin/obsidian daily:read vault="Obsidian Vault"
 ```
 
-3. Check for any backlinks to this project:
+3. Check for any backlinks to this project (run via Bash tool):
 ```bash
-obsidian backlinks file="DylanWorkout" vault="Obsidian Vault"
+/opt/homebrew/bin/obsidian backlinks file="DylanWorkout" vault="Obsidian Vault"
 ```
 
 Present a summary of:
