@@ -7,10 +7,10 @@ import {
   ChevronDown,
   ChevronRight,
   BookOpen,
-  Download,
   FileText,
-  ExternalLink,
+  ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
 
 const tabs = [
   { id: "principles", label: "Principles" },
@@ -19,7 +19,6 @@ const tabs = [
   { id: "progression", label: "Progression" },
   { id: "health", label: "Health" },
   { id: "technique", label: "Technique" },
-  { id: "manual", label: "Manual" },
 ];
 
 interface LessonCard {
@@ -391,7 +390,6 @@ export default function LearnPage() {
     });
   }
 
-  const isManual = activeTab === "manual";
   const currentCards = allContent[activeTab] ?? [];
 
   return (
@@ -404,101 +402,56 @@ export default function LearnPage() {
         Core principles from the Enter the Dragon training philosophy
       </p>
 
+      {/* Training Manual link */}
+      <Link href="/client/learn/manual">
+        <Card className="p-4 flex items-center gap-3 hover:border-brand/25 hover:shadow-[0_0_20px_rgba(245,166,35,0.06)] transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
+          <div className="h-10 w-10 rounded-lg bg-brand/10 flex items-center justify-center shrink-0">
+            <FileText className="h-5 w-5 text-brand" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold">Enter the Dragon v.2 — Full Training Manual</p>
+            <p className="text-xs text-text-muted">60 pages — read online or download PDF</p>
+          </div>
+          <ArrowRight className="h-4 w-4 text-text-muted shrink-0" />
+        </Card>
+      </Link>
+
       <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
-      {isManual ? (
-        <div className="space-y-4">
-          <Card className="p-5">
-            <div className="flex items-start gap-4">
-              <div className="h-12 w-12 rounded-lg bg-brand/10 flex items-center justify-center shrink-0">
-                <FileText className="h-6 w-6 text-brand" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="font-bold text-base">Enter the Dragon v.2</h2>
-                <p className="text-sm text-text-secondary mt-1">
-                  The Complete Strength & Health Guide by Delan Chan. 60 pages covering philosophy, nutrition,
-                  sleep, cardio, resistance training, biomechanics, technique cues, and the full exercise index.
-                </p>
-                <p className="text-xs text-text-muted mt-2">PDF - 2.2 MB</p>
-              </div>
-            </div>
-            <div className="flex gap-3 mt-4">
-              <a
-                href="/enter-the-dragon-guide.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-bold text-black hover:bg-brand-hover hover:scale-[1.02] transition-all duration-200"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Read Guide
-              </a>
-              <a
-                href="/enter-the-dragon-guide.pdf"
-                download="Enter the Dragon v2 - Complete Guide.pdf"
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-brand/30 px-4 py-2.5 text-sm font-medium text-brand hover:bg-brand/10 transition-all duration-200"
-              >
-                <Download className="h-4 w-4" />
-                Download
-              </a>
-            </div>
-          </Card>
+      <div className="space-y-3">
+        {currentCards.map((card, i) => {
+          const id = `${activeTab}-${i}`;
+          const isExpanded = expandedCards.has(id);
 
-          <Card className="p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-text-muted mb-3">What's Inside</p>
-            <div className="space-y-2.5">
-              {[
-                { part: "Part I", title: "The Why", desc: "Philosophy and principles" },
-                { part: "Part II", title: "The How", desc: "Cardio, nutrition, sleep, and resistance training guides" },
-                { part: "Part III", title: "The What", desc: "Training truths, programming, and exercise selection" },
-                { part: "Part IV", title: "Where This Applies", desc: "Biomechanics, technique cues, and exercise index" },
-              ].map((section) => (
-                <div key={section.part} className="flex items-start gap-3 py-1.5">
-                  <span className="text-xs font-mono text-brand shrink-0 mt-0.5">{section.part}</span>
-                  <div>
-                    <p className="text-sm font-medium">{section.title}</p>
-                    <p className="text-xs text-text-muted">{section.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {currentCards.map((card, i) => {
-            const id = `${activeTab}-${i}`;
-            const isExpanded = expandedCards.has(id);
-
-            return (
-              <Card key={id} className="overflow-hidden">
-                <button
-                  onClick={() => toggleCard(id)}
-                  className="w-full px-4 py-3.5 flex items-center justify-between hover:bg-surface/50 transition-colors text-left"
-                >
-                  <p className="font-semibold text-sm">{card.title}</p>
-                  {isExpanded ? (
-                    <ChevronDown className="h-4 w-4 text-text-muted shrink-0" />
-                  ) : (
-                    <ChevronRight className="h-4 w-4 text-text-muted shrink-0" />
-                  )}
-                </button>
-                {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-border pt-3">
-                    <ul className="space-y-2">
-                      {card.content.map((line, j) => (
-                        <li key={j} className="flex items-start gap-2 text-sm text-text-secondary">
-                          <span className="text-brand mt-1 shrink-0">-</span>
-                          <span>{line}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+          return (
+            <Card key={id} className="overflow-hidden">
+              <button
+                onClick={() => toggleCard(id)}
+                className="w-full px-4 py-3.5 flex items-center justify-between hover:bg-surface/50 transition-colors text-left"
+              >
+                <p className="font-semibold text-sm">{card.title}</p>
+                {isExpanded ? (
+                  <ChevronDown className="h-4 w-4 text-text-muted shrink-0" />
+                ) : (
+                  <ChevronRight className="h-4 w-4 text-text-muted shrink-0" />
                 )}
-              </Card>
-            );
-          })}
-        </div>
-      )}
+              </button>
+              {isExpanded && (
+                <div className="px-4 pb-4 border-t border-border pt-3">
+                  <ul className="space-y-2">
+                    {card.content.map((line, j) => (
+                      <li key={j} className="flex items-start gap-2 text-sm text-text-secondary">
+                        <span className="text-brand mt-1 shrink-0">-</span>
+                        <span>{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 }
