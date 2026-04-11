@@ -8,7 +8,6 @@ import { Modal } from "@/components/ui/modal";
 import { PillSelector } from "@/components/ui/pill-selector";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FileText, Check, X } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import { formatDate } from "@/lib/utils/format";
 import { toast } from "sonner";
 import type { Tables, ApplicationStatus } from "@/lib/types/database";
@@ -35,34 +34,16 @@ export function ApplicationsContent({ applications: initial, coachId }: Applicat
   };
 
   async function handleAction(id: string, status: "approved" | "rejected") {
-    const supabase = createClient();
-    const app = applications.find((a) => a.id === id);
+    try {
+      const res = await fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "update_application", applicationId: id, status }),
+      });
 
-    const { error } = await supabase
-      .from("applications")
-      .update({
-        status,
-        reviewed_by: coachId,
-        reviewed_at: new Date().toISOString(),
-      })
-      .eq("id", id);
-
-    if (!error) {
-      // If approved, try to auto-link the client to this coach
-      if (status === "approved" && app?.email) {
-        const { data: clientProfile } = await supabase
-          .from("profiles")
-          .select("id, role")
-          .eq("email", app.email)
-          .single();
-
-        if (clientProfile && clientProfile.role === "client") {
-          await supabase.from("coach_clients").insert({
-            coach_id: coachId,
-            client_id: clientProfile.id,
-            status: "active",
-          });
-        }
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error);
       }
 
       setApplications((prev) =>
@@ -74,6 +55,8 @@ export function ApplicationsContent({ applications: initial, coachId }: Applicat
           ? "Application approved! Client added to your roster."
           : "Application rejected"
       );
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update application");
     }
   }
 

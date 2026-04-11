@@ -11,7 +11,6 @@ import { StatCard } from "@/components/ui/stat-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Trophy, Dumbbell, ClipboardCheck, ArrowLeft } from "lucide-react";
 import { formatDate, formatWeight, formatDuration } from "@/lib/utils/format";
-import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import Link from "next/link";
 import type { Tables } from "@/lib/types/database";
@@ -39,21 +38,22 @@ export function ClientDetailContent({ data }: { data: ClientDetailData }) {
 
   async function handleCheckinFeedback(checkinId: string) {
     setSavingFeedback(checkinId);
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("checkins")
-      .update({
-        coach_feedback: feedbackText,
-        status: "reviewed" as const,
-        reviewed_at: new Date().toISOString(),
-      })
-      .eq("id", checkinId);
+    try {
+      const res = await fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "checkin_feedback", checkinId, feedback: feedbackText }),
+      });
 
-    if (!error) {
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error);
+      }
+
       toast.success("Feedback saved!");
       setFeedbackText("");
-    } else {
-      toast.error("Failed to save feedback");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save feedback");
     }
     setSavingFeedback(null);
   }

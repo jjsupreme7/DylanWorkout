@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ApplicationsContent } from "./applications-content";
 
@@ -7,7 +7,8 @@ export default async function ApplicationsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: applications } = await supabase
+  const admin = createAdminClient();
+  const { data: applications } = await admin
     .from("applications")
     .select("*")
     .order("created_at", { ascending: false });

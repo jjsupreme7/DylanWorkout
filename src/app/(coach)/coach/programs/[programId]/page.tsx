@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ProgramBuilderContent } from "./program-builder-content";
 
@@ -12,7 +12,10 @@ export default async function ProgramBuilderPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const programRes = await supabase
+  // Use admin client for reads that span multiple tables
+  const admin = createAdminClient();
+
+  const programRes = await admin
     .from("programs")
     .select(`
       *,
@@ -27,9 +30,9 @@ export default async function ProgramBuilderPage({ params }: Props) {
     .eq("id", programId)
     .single();
 
-  const exercisesRes = await supabase.from("exercises").select("*").order("name");
+  const exercisesRes = await admin.from("exercises").select("*").order("name");
 
-  const clientsRes = await supabase
+  const clientsRes = await admin
     .from("coach_clients")
     .select(`
       client:profiles!coach_clients_client_id_fkey(id, full_name)

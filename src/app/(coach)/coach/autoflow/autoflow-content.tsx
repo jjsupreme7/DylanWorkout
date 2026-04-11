@@ -65,30 +65,35 @@ export function AutoflowContent({ clients, programs, coachId }: AutoflowContentP
     }
 
     setSaving(true);
-    const supabase = createClient();
-    let successCount = 0;
-
-    for (const clientId of selectedClients) {
-      const { error } = await supabase.from("client_programs").insert({
-        client_id: clientId,
-        program_id: selectedProgram,
-        start_date: startDate,
+    try {
+      const res = await fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "batch_assign",
+          programId: selectedProgram,
+          clientIds: [...selectedClients],
+          startDate,
+        }),
       });
-      if (!error) successCount++;
-    }
 
-    toast.success(`Program assigned to ${successCount} client${successCount !== 1 ? "s" : ""}!`);
-    setShowBatchAssign(false);
-    setSelectedClients(new Set());
-    setSelectedProgram("");
-    setStartDate("");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      toast.success(`Program assigned to ${data.count} client${data.count !== 1 ? "s" : ""}!`);
+      setShowBatchAssign(false);
+      setSelectedClients(new Set());
+      setSelectedProgram("");
+      setStartDate("");
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to assign program");
+    }
     setSaving(false);
-    router.refresh();
   }
 
   async function handleSendReminder(formData: FormData) {
     setSaving(true);
-    const supabase = createClient();
     const message = formData.get("message") as string;
     const reminderType = formData.get("reminder_type") as string;
 
@@ -104,14 +109,21 @@ export function AutoflowContent({ clients, programs, coachId }: AutoflowContentP
       type: reminderType,
     }));
 
-    const { error } = await supabase.from("notifications").insert(notifications);
+    try {
+      const res = await fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "send_notifications", notifications }),
+      });
 
-    if (!error) {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
       toast.success(`Reminder sent to ${targetClients.length} client${targetClients.length !== 1 ? "s" : ""}!`);
       setShowReminder(false);
       setSelectedClients(new Set());
-    } else {
-      toast.error("Failed to send reminders");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send reminders");
     }
     setSaving(false);
   }
@@ -126,7 +138,7 @@ export function AutoflowContent({ clients, programs, coachId }: AutoflowContentP
 
     const content = formData.get("content") as string;
 
-    // Post to community
+    // Post to community (coach owns this post, so RLS allows it)
     const { error: postError } = await supabase.from("community_posts").insert({
       author_id: user.id,
       content,
@@ -134,17 +146,22 @@ export function AutoflowContent({ clients, programs, coachId }: AutoflowContentP
       pinned: true,
     });
 
-    // Also send as notification to all clients
+    // Send notifications via admin API route
     const allClientIds = clients.map((c: any) => c.client?.id).filter(Boolean);
     if (allClientIds.length > 0) {
-      await supabase.from("notifications").insert(
-        allClientIds.map((clientId: string) => ({
-          user_id: clientId,
-          title: "Coach Announcement",
-          body: content.slice(0, 200),
-          type: "broadcast",
-        }))
-      );
+      await fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "send_notifications",
+          notifications: allClientIds.map((clientId: string) => ({
+            user_id: clientId,
+            title: "Coach Announcement",
+            body: content.slice(0, 200),
+            type: "broadcast",
+          })),
+        }),
+      });
     }
 
     if (!postError) {
