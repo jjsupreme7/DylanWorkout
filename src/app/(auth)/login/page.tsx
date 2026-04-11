@@ -67,6 +67,12 @@ export default function LoginPage() {
           Create account
         </Link>
       </div>
+
+      <div className="mt-6 text-center">
+        <Link href="/" className="text-xs text-text-muted hover:text-text-secondary transition-colors">
+          &larr; Back to website
+        </Link>
+      </div>
     </div>
   );
 }
