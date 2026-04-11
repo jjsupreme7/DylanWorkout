@@ -15,7 +15,7 @@ export async function getCoachClients(coachId: string) {
       client:profiles!coach_clients_client_id_fkey(
         id, full_name, email, avatar_url,
         streaks(*),
-        checkins(submitted_at, status)
+        checkins!checkins_client_id_fkey(submitted_at, status)
       )
     `)
     .eq("coach_id", coachId)
