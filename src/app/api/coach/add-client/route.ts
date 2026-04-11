@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -23,8 +23,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
 
-  // Find the client by email
-  const { data: clientProfile } = await supabase
+  // Find the client by email (use admin client to bypass RLS —
+  // coach can't see the profile until they're linked)
+  const admin = createAdminClient();
+  const { data: clientProfile } = await admin
     .from("profiles")
     .select("id, full_name, role")
     .eq("email", email)
@@ -45,7 +47,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Check if already linked
-  const { data: existing } = await supabase
+  const { data: existing } = await admin
     .from("coach_clients")
     .select("id")
     .eq("coach_id", user.id)
@@ -60,7 +62,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Create the coach-client link
-  const { error } = await supabase.from("coach_clients").insert({
+  const { error } = await admin.from("coach_clients").insert({
     coach_id: user.id,
     client_id: clientProfile.id,
     status: "active",
