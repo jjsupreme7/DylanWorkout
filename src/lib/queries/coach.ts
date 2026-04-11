@@ -1,7 +1,12 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
+
+// All coach queries use the admin client to bypass RLS.
+// Security is enforced by the auth check in each page/route
+// that calls these functions — they all verify the user is
+// a coach before invoking any query.
 
 export async function getCoachClients(coachId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data } = await supabase
     .from("coach_clients")
@@ -20,7 +25,7 @@ export async function getCoachClients(coachId: string) {
 }
 
 export async function getCoachClientDetail(coachId: string, clientId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const [client, sessions, checkins, prs, foodLogs] = await Promise.all([
     supabase
@@ -64,7 +69,7 @@ export async function getCoachClientDetail(coachId: string, clientId: string) {
 }
 
 export async function getCoachPrograms(coachId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data } = await supabase
     .from("programs")
@@ -88,7 +93,7 @@ export async function getCoachPrograms(coachId: string) {
 }
 
 export async function getCoachDashboardStats(coachId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const [clients, pendingCheckins, applications] = await Promise.all([
     supabase
