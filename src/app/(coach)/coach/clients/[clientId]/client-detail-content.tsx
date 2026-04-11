@@ -9,14 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { StatCard } from "@/components/ui/stat-card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Trophy, Dumbbell, ClipboardCheck, ArrowLeft } from "lucide-react";
+import { Modal } from "@/components/ui/modal";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Trophy, Dumbbell, ClipboardCheck, ClipboardList, ArrowLeft, RefreshCw, XCircle, Calendar } from "lucide-react";
 import { formatDate, formatWeight, formatDuration } from "@/lib/utils/format";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Tables } from "@/lib/types/database";
 
 const tabs = [
   { id: "overview", label: "Overview" },
+  { id: "program", label: "Program" },
   { id: "sessions", label: "Sessions" },
   { id: "checkins", label: "Check-ins" },
   { id: "prs", label: "PRs" },
@@ -27,12 +32,22 @@ interface ClientDetailData {
   sessions: any[];
   checkins: any[];
   prs: any[];
+  activeProgram: any | null;
 }
 
-export function ClientDetailContent({ data }: { data: ClientDetailData }) {
+interface ClientDetailProps {
+  data: ClientDetailData;
+  programs: any[];
+}
+
+export function ClientDetailContent({ data, programs }: ClientDetailProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [feedbackText, setFeedbackText] = useState("");
   const [savingFeedback, setSavingFeedback] = useState<string | null>(null);
+  const [showUnassign, setShowUnassign] = useState(false);
+  const [showSwap, setShowSwap] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const router = useRouter();
 
   const client = data.client!;
 
@@ -58,6 +73,54 @@ export function ClientDetailContent({ data }: { data: ClientDetailData }) {
     setSavingFeedback(null);
   }
 
+  async function handleUnassign() {
+    setActionLoading(true);
+    try {
+      const res = await fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "unassign_program",
+          clientProgramId: data.activeProgram.id,
+          clientId: client.id,
+        }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+      toast.success("Program unassigned");
+      setShowUnassign(false);
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to unassign");
+    }
+    setActionLoading(false);
+  }
+
+  async function handleSwap(formData: FormData) {
+    setActionLoading(true);
+    const newProgramId = formData.get("program_id") as string;
+    const startDate = formData.get("start_date") as string;
+    try {
+      const res = await fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "swap_program",
+          clientId: client.id,
+          oldClientProgramId: data.activeProgram?.id,
+          newProgramId,
+          startDate,
+        }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+      toast.success("Program swapped!");
+      setShowSwap(false);
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to swap program");
+    }
+    setActionLoading(false);
+  }
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -81,6 +144,94 @@ export function ClientDetailContent({ data }: { data: ClientDetailData }) {
             <StatCard label="PRs" value={data.prs.length} />
             <StatCard label="Check-ins" value={data.checkins.length} />
           </div>
+        </div>
+      )}
+
+      {activeTab === "program" && (
+        <div className="space-y-4">
+          {data.activeProgram ? (
+            <>
+              <Card className="p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">{data.activeProgram.program?.name}</CardTitle>
+                  <Badge variant="active">Active</Badge>
+                </div>
+                {data.activeProgram.program?.description && (
+                  <p className="text-sm text-text-secondary">{data.activeProgram.program.description}</p>
+                )}
+                <div className="flex items-center gap-4 text-sm text-text-secondary">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5" />
+                    Started {formatDate(data.activeProgram.start_date)}
+                  </span>
+                  {data.activeProgram.program?.program_days && (
+                    <span>{data.activeProgram.program.program_days.length} training days</span>
+                  )}
+                  {data.activeProgram.program?.difficulty && (
+                    <Badge variant="default" className="capitalize">{data.activeProgram.program.difficulty}</Badge>
+                  )}
+                </div>
+              </Card>
+
+              <div className="flex items-center gap-2">
+                <Button variant="secondary" size="sm" onClick={() => setShowSwap(true)}>
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Swap Program
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => setShowUnassign(true)} className="text-danger hover:bg-danger/10">
+                  <XCircle className="h-3.5 w-3.5" />
+                  Unassign
+                </Button>
+              </div>
+
+              {/* Unassign confirmation modal */}
+              <Modal open={showUnassign} onClose={() => setShowUnassign(false)} title="Unassign Program">
+                <div className="space-y-4">
+                  <p className="text-sm text-text-secondary">
+                    Remove <strong>{data.activeProgram.program?.name}</strong> from{" "}
+                    <strong>{client.full_name}</strong>? They will no longer see this program in their Workout tab.
+                  </p>
+                  <div className="flex gap-2">
+                    <Button variant="secondary" onClick={() => setShowUnassign(false)} className="flex-1">
+                      Cancel
+                    </Button>
+                    <Button onClick={handleUnassign} loading={actionLoading} className="flex-1 bg-danger hover:bg-danger/90">
+                      Unassign
+                    </Button>
+                  </div>
+                </div>
+              </Modal>
+
+              {/* Swap program modal */}
+              <Modal open={showSwap} onClose={() => setShowSwap(false)} title="Swap Program">
+                <form action={handleSwap} className="space-y-3">
+                  <p className="text-sm text-text-secondary">
+                    Replace <strong>{data.activeProgram.program?.name}</strong> with a new program.
+                  </p>
+                  <Select
+                    name="program_id"
+                    label="New Program"
+                    options={programs
+                      .filter((p: any) => p.id !== data.activeProgram?.program?.id)
+                      .map((p: any) => ({ value: p.id, label: p.name }))}
+                    placeholder="Select program"
+                  />
+                  <Input name="start_date" label="Start Date" type="date" required />
+                  <Button type="submit" loading={actionLoading} className="w-full">
+                    Swap Program
+                  </Button>
+                </form>
+              </Modal>
+            </>
+          ) : (
+            <EmptyState
+              icon={ClipboardList}
+              title="No active program"
+              description="Assign a training program from your programs page"
+              actionLabel="Go to Programs"
+              onAction={() => router.push("/coach/programs")}
+            />
+          )}
         </div>
       )}
 

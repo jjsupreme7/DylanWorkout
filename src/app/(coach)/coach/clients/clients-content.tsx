@@ -65,6 +65,9 @@ export function ClientsContent({ clients, coachId }: ClientsContentProps) {
             const workoutStreak = cc.client?.streaks?.find(
               (s: any) => s.streak_type === "workout"
             );
+            const activeProgram = cc.client?.client_programs?.find(
+              (cp: any) => cp.is_active
+            );
 
             return (
               <Link key={cc.id} href={`/coach/clients/${cc.client?.id}`}>
@@ -72,9 +75,14 @@ export function ClientsContent({ clients, coachId }: ClientsContentProps) {
                   <Avatar src={cc.client?.avatar_url} name={cc.client?.full_name ?? "Client"} />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium">{cc.client?.full_name}</p>
-                    <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
                       {workoutStreak && workoutStreak.current_streak > 0 && (
                         <Badge variant="success">{workoutStreak.current_streak}d streak</Badge>
+                      )}
+                      {activeProgram ? (
+                        <Badge variant="active">{activeProgram.program?.name}</Badge>
+                      ) : (
+                        <Badge variant="default">No program</Badge>
                       )}
                     </div>
                   </div>

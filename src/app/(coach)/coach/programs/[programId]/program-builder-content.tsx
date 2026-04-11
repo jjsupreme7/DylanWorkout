@@ -148,6 +148,21 @@ export function ProgramBuilderContent({
     });
 
     if (!error) {
+      // Send notification to client (fire-and-forget)
+      fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "send_notifications",
+          notifications: [{
+            user_id: clientId,
+            title: "New program assigned!",
+            body: `Your coach assigned you: ${program.name}. Check your Workout tab!`,
+            type: "program_assigned",
+          }],
+        }),
+      }).catch(() => {});
+
       toast.success("Program assigned!");
       setShowAssign(false);
     } else {

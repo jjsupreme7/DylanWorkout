@@ -23,14 +23,15 @@ export default async function ClientLayout({ children }: { children: React.React
 
   // Use real profile if logged in, otherwise use mock for preview
   let profile = MOCK_PROFILE;
+  let unreadCount = 0;
   if (user) {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-    if (data) profile = data;
+    const [profileRes, notifRes] = await Promise.all([
+      supabase.from("profiles").select("*").eq("id", user.id).single(),
+      supabase.from("notifications").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("read", false),
+    ]);
+    if (profileRes.data) profile = profileRes.data;
+    unreadCount = notifRes.count ?? 0;
   }
 
-  return <ClientShell profile={profile}>{children}</ClientShell>;
+  return <ClientShell profile={profile} unreadCount={unreadCount}>{children}</ClientShell>;
 }

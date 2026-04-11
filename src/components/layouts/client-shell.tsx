@@ -16,10 +16,11 @@ const navItems = [
 
 interface ClientShellProps {
   profile: Tables<"profiles">;
+  unreadCount?: number;
   children: React.ReactNode;
 }
 
-export function ClientShell({ profile, children }: ClientShellProps) {
+export function ClientShell({ profile, unreadCount = 0, children }: ClientShellProps) {
   return (
     <div className="min-h-[100dvh] pb-20">
       {/* Top header */}
@@ -37,6 +38,11 @@ export function ClientShell({ profile, children }: ClientShellProps) {
             className="relative rounded-[--radius-md] p-2.5 hover:bg-surface transition-colors"
           >
             <Bell className="h-5 w-5 text-text-secondary" strokeWidth={1.5} />
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[10px] font-bold text-white">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
           </Link>
         </div>
       </header>

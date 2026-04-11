@@ -113,7 +113,142 @@ export async function POST(request: NextRequest) {
       const { error } = await admin.from("client_programs").insert(inserts);
 
       if (error) return NextResponse.json({ error: "Failed to assign program" }, { status: 500 });
+
+      // Send notifications to all assigned clients
+      const { data: prog } = await admin.from("programs").select("name").eq("id", programId).single();
+      if (prog) {
+        const notifications = clientIds.map((clientId: string) => ({
+          user_id: clientId,
+          title: "New program assigned!",
+          body: `Your coach assigned you: ${prog.name}. Check your Workout tab!`,
+          type: "program_assigned",
+        }));
+        await admin.from("notifications").insert(notifications);
+      }
+
       return NextResponse.json({ success: true, count: clientIds.length });
+    }
+
+    // ── Unassign program from client ──
+    case "unassign_program": {
+      const { clientProgramId, clientId } = body;
+
+      const { data: cp, error } = await admin
+        .from("client_programs")
+        .update({ is_active: false, end_date: new Date().toISOString().split("T")[0] })
+        .eq("id", clientProgramId)
+        .select("program:programs(name)")
+        .single();
+
+      if (error) return NextResponse.json({ error: "Failed to unassign program" }, { status: 500 });
+
+      // Notify client
+      if (cp?.program) {
+        await admin.from("notifications").insert({
+          user_id: clientId,
+          title: "Program update",
+          body: `Your program "${(cp.program as any).name}" has been unassigned. Your coach will assign a new one soon.`,
+          type: "program_unassigned",
+        });
+      }
+
+      return NextResponse.json({ success: true });
+    }
+
+    // ── Swap program for client ──
+    case "swap_program": {
+      const { clientId: swapClientId, oldClientProgramId, newProgramId, startDate } = body;
+
+      // Deactivate old program
+      if (oldClientProgramId) {
+        await admin
+          .from("client_programs")
+          .update({ is_active: false, end_date: new Date().toISOString().split("T")[0] })
+          .eq("id", oldClientProgramId);
+      }
+
+      // Assign new program
+      const { error } = await admin.from("client_programs").insert({
+        client_id: swapClientId,
+        program_id: newProgramId,
+        start_date: startDate,
+      });
+
+      if (error) return NextResponse.json({ error: "Failed to swap program" }, { status: 500 });
+
+      // Notify client
+      const { data: newProg } = await admin.from("programs").select("name").eq("id", newProgramId).single();
+      if (newProg) {
+        await admin.from("notifications").insert({
+          user_id: swapClientId,
+          title: "New program assigned!",
+          body: `Your coach switched you to: ${newProg.name}. Check your Workout tab!`,
+          type: "program_assigned",
+        });
+      }
+
+      return NextResponse.json({ success: true });
+    }
+
+    // ── Duplicate program ──
+    case "duplicate_program": {
+      const { programId: dupProgramId } = body;
+
+      // Fetch original program with full structure
+      const { data: original, error: fetchErr } = await admin
+        .from("programs")
+        .select(`*, program_days(*, program_exercises(*))`)
+        .eq("id", dupProgramId)
+        .single();
+
+      if (fetchErr || !original) return NextResponse.json({ error: "Program not found" }, { status: 404 });
+
+      // Create new program
+      const { data: newProgram, error: progErr } = await admin
+        .from("programs")
+        .insert({
+          coach_id: user.id,
+          name: `${original.name} (Copy)`,
+          description: original.description,
+          duration_weeks: original.duration_weeks,
+          difficulty: original.difficulty,
+          is_template: false,
+        })
+        .select()
+        .single();
+
+      if (progErr || !newProgram) return NextResponse.json({ error: "Failed to duplicate program" }, { status: 500 });
+
+      // Copy all days and exercises
+      for (const day of (original.program_days ?? [])) {
+        const { data: newDay } = await admin
+          .from("program_days")
+          .insert({
+            program_id: newProgram.id,
+            day_number: day.day_number,
+            name: day.name,
+            notes: day.notes,
+          })
+          .select()
+          .single();
+
+        if (newDay && day.program_exercises?.length) {
+          const exerciseInserts = day.program_exercises.map((pe: any) => ({
+            program_day_id: newDay.id,
+            exercise_id: pe.exercise_id,
+            order_index: pe.order_index,
+            sets: pe.sets,
+            reps: pe.reps,
+            rest_seconds: pe.rest_seconds,
+            tempo: pe.tempo,
+            rpe: pe.rpe,
+            notes: pe.notes,
+          }));
+          await admin.from("program_exercises").insert(exerciseInserts);
+        }
+      }
+
+      return NextResponse.json({ success: true, programId: newProgram.id });
     }
 
     default:

@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { getCoachClientDetail } from "@/lib/queries/coach";
+import { getCoachClientDetail, getCoachPrograms } from "@/lib/queries/coach";
 import { ClientDetailContent } from "./client-detail-content";
 
 interface Props {
@@ -13,8 +13,11 @@ export default async function ClientDetailPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const data = await getCoachClientDetail(user.id, clientId);
+  const [data, programs] = await Promise.all([
+    getCoachClientDetail(user.id, clientId),
+    getCoachPrograms(user.id),
+  ]);
   if (!data.client) redirect("/coach/clients");
 
-  return <ClientDetailContent data={data} />;
+  return <ClientDetailContent data={data} programs={programs} />;
 }

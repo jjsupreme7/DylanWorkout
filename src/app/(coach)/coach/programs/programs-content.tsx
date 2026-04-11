@@ -9,7 +9,7 @@ import { Select } from "@/components/ui/select";
 import { Modal } from "@/components/ui/modal";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Plus, ClipboardList, ChevronRight } from "lucide-react";
+import { Plus, ClipboardList, ChevronRight, Copy } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -24,7 +24,28 @@ export function ProgramsContent({ programs: initialPrograms, coachId }: Programs
   const [programs, setPrograms] = useState(initialPrograms);
   const [showNew, setShowNew] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [duplicating, setDuplicating] = useState<string | null>(null);
   const router = useRouter();
+
+  async function handleDuplicate(e: React.MouseEvent, programId: string) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDuplicating(programId);
+    try {
+      const res = await fetch("/api/coach/action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "duplicate_program", programId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      toast.success("Program duplicated!");
+      router.push(`/coach/programs/${data.programId}`);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to duplicate program");
+    }
+    setDuplicating(null);
+  }
 
   async function handleCreate(formData: FormData) {
     setSaving(true);
@@ -86,7 +107,17 @@ export function ProgramsContent({ programs: initialPrograms, coachId }: Programs
                       )}
                     </div>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-text-muted shrink-0" />
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={(e) => handleDuplicate(e, program.id)}
+                      disabled={duplicating === program.id}
+                      className="rounded-lg p-2 text-text-muted hover:text-brand hover:bg-brand/10 transition-colors"
+                      title="Duplicate program"
+                    >
+                      <Copy className={`h-4 w-4 ${duplicating === program.id ? "animate-pulse" : ""}`} />
+                    </button>
+                    <ChevronRight className="h-5 w-5 text-text-muted" />
+                  </div>
                 </div>
               </Card>
             </Link>

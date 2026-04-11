@@ -15,7 +15,8 @@ export async function getCoachClients(coachId: string) {
       client:profiles!coach_clients_client_id_fkey(
         id, full_name, email, avatar_url,
         streaks(*),
-        checkins!checkins_client_id_fkey(submitted_at, status)
+        checkins!checkins_client_id_fkey(submitted_at, status),
+        client_programs(id, is_active, start_date, program:programs(id, name))
       )
     `)
     .eq("coach_id", coachId)
@@ -27,7 +28,7 @@ export async function getCoachClients(coachId: string) {
 export async function getCoachClientDetail(coachId: string, clientId: string) {
   const supabase = createAdminClient();
 
-  const [client, sessions, checkins, prs, foodLogs] = await Promise.all([
+  const [client, sessions, checkins, prs, foodLogs, activeProgram] = await Promise.all([
     supabase
       .from("profiles")
       .select("*")
@@ -57,6 +58,12 @@ export async function getCoachClientDetail(coachId: string, clientId: string) {
       .eq("client_id", clientId)
       .order("logged_at", { ascending: false })
       .limit(50),
+    supabase
+      .from("client_programs")
+      .select(`*, program:programs(*)`)
+      .eq("client_id", clientId)
+      .eq("is_active", true)
+      .maybeSingle(),
   ]);
 
   return {
@@ -65,6 +72,7 @@ export async function getCoachClientDetail(coachId: string, clientId: string) {
     checkins: checkins.data ?? [],
     prs: prs.data ?? [],
     foodLogs: foodLogs.data ?? [],
+    activeProgram: activeProgram.data,
   };
 }
 
