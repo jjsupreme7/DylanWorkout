@@ -174,7 +174,7 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
-              href="/login"
+              href="/signout"
               className="rounded-[--radius-md] px-3 sm:px-4 py-2 text-sm font-medium text-text-secondary hover:text-brand transition-colors"
             >
               Sign In
@@ -247,7 +247,7 @@ export default function LandingPage() {
                   <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <Link
-                  href="/login"
+                  href="/signout"
                   className="inline-flex items-center gap-2 rounded-[--radius-md] border border-brand/50 text-brand hover:bg-brand/10 px-7 py-3.5 text-base font-medium hover:scale-105 transition-all duration-300 bg-transparent"
                 >
                   I&apos;m already a member
@@ -504,7 +504,7 @@ export default function LandingPage() {
               <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
-              href="/login"
+              href="/signout"
               className="inline-flex items-center gap-2 rounded-[--radius-md] border border-brand/50 text-brand hover:bg-brand/10 px-8 py-3.5 text-base font-medium transition-all duration-300 bg-transparent"
             >
               I&apos;m a Member
@@ -524,7 +524,7 @@ export default function LandingPage() {
           </span>
           <div className="flex items-center gap-6 text-xs text-text-muted">
             <Link href="/apply" className="hover:text-brand transition-colors">Apply</Link>
-            <Link href="/login" className="hover:text-brand transition-colors">Sign In</Link>
+            <Link href="/signout" className="hover:text-brand transition-colors">Sign In</Link>
             <span>&copy; {new Date().getFullYear()} Enter the Dragon</span>
           </div>
         </div>
